@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "eval_name": "greenfield-rate-limiter-package",
+  "prompt": "Create a Swift package called RateKit containing a token-bucket rate limiter that can be safely used from many concurrent tasks. It should expose `func acquire() async throws` that waits until a token is available and respects task cancellation. Include tests. Target the current stable Swift toolchain and make sure `swift build` and `swift test` pass.",
+  "assertions": [
+    "swift build exits 0 in the delivered package",
+    "swift test exits 0 in the delivered package",
+    "the rate limiter is an actor",
+    "acquire() honors task cancellation (checkCancellation / withTaskCancellationHandler / CancellationError)",
+    "tests use Swift Testing (@Test and #expect), not XCTest",
+    "no Thread.sleep, DispatchQueue, or semaphores in Sources/"
+  ]
+}

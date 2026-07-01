@@ -1,0 +1,359 @@
+{
+  "metadata": {
+    "skill_name": "swift-language",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-07-01T21:09:57Z",
+    "evals_run": [
+      0,
+      1,
+      2
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 111.1,
+        "tokens": 51899,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "migrated.swift contains no DispatchQueue usage",
+          "passed": true,
+          "evidence": "only in comments/none"
+        },
+        {
+          "text": "load API is async (async throws) instead of a completion handler",
+          "passed": true,
+          "evidence": "func load(_ url: URL) async throws"
+        },
+        {
+          "text": "cache state is protected by an actor or Mutex (actor keyword or Mutex< present)",
+          "passed": true,
+          "evidence": "actor serializes"
+        },
+        {
+          "text": "migrated.swift typechecks under swiftc -typecheck -swift-version 6",
+          "passed": true,
+          "evidence": "clean"
+        },
+        {
+          "text": "MIGRATION.md explains the isolation choice (mentions actor/MainActor/Sendable)",
+          "passed": true,
+          "evidence": "actor"
+        },
+        {
+          "text": "duplicate in-flight requests are coalesced in code or explicitly discussed in MIGRATION.md",
+          "passed": true,
+          "evidence": "inFlight"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 376.4,
+        "tokens": 85000,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "swift build exits 0 in the delivered package",
+          "passed": true,
+          "evidence": "[0/1] Planning build\nBuilding for debugging...\n[0/1] Write swift-version--58304C5D6DBC2206.txt\n[2/3] Emitting module RateKit\n[3/3] Compiling RateKit TokenBucket.swift\nBuild complete! (0.34s)\n"
+        },
+        {
+          "text": "swift test exits 0 in the delivered package",
+          "passed": true,
+          "evidence": "\u2714 Test cancelledWaiterReturnsItsReservation() passed after 0.001 seconds.\n\u2714 Suite \"TokenBucket\" passed after 0.001 seconds.\n\u2714 Test run with 10 tests in 1 suite passed after 0.001 seconds.\n"
+        },
+        {
+          "text": "the rate limiter is an actor",
+          "passed": true,
+          "evidence": "Sources/RateKit/TokenBucket.swift:public actor TokenBucket<ClockType: Clock<Duration>> {"
+        },
+        {
+          "text": "acquire() honors task cancellation (checkCancellation / withTaskCancellationHandler / CancellationError)",
+          "passed": true,
+          "evidence": "Sources/RateKit/TokenBucket.swift:    /// `CancellationError` is thrown.\nSources/RateKit/TokenBucket.swift:        try Task.checkCancellation()"
+        },
+        {
+          "text": "tests use Swift Testing (@Test and #expect), not XCTest",
+          "passed": true,
+          "evidence": "Tests/RateKitTests/TokenBucketTests.swift:    @Test func acquiresImmed | Tests/RateKitTests/TokenBucketTests.swift:        #expect(await bucket"
+        },
+        {
+          "text": "no Thread.sleep, DispatchQueue, or semaphores in Sources/",
+          "passed": true,
+          "evidence": "none found"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 116.1,
+        "tokens": 58376,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "fixed.swift contains no try!, as!, or force-unwrap operators",
+          "passed": true,
+          "evidence": "no force ops"
+        },
+        {
+          "text": "fixed.swift typechecks under swiftc -typecheck -swift-version 6",
+          "passed": true,
+          "evidence": "clean"
+        },
+        {
+          "text": "fixed.swift uses Codable instead of JSONSerialization",
+          "passed": true,
+          "evidence": "Codable present, JSONSerialization absent"
+        },
+        {
+          "text": "the -1 sentinel is replaced by an Optional or throwing API",
+          "passed": true,
+          "evidence": "throws"
+        },
+        {
+          "text": "REVIEW.md identifies stringly-typed keys AND the try? error-swallowing pattern",
+          "passed": true,
+          "evidence": "keys:Stringly / swallow:try?` swallowing the decode error** \u2014 the original discard"
+        },
+        {
+          "text": "REVIEW.md addresses concurrency safety of the class (Sendable/MainActor/actor mentioned)",
+          "passed": true,
+          "evidence": "Concurren"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 81.6,
+        "tokens": 40869,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "migrated.swift contains no DispatchQueue usage",
+          "passed": true,
+          "evidence": "only in comments/none"
+        },
+        {
+          "text": "load API is async (async throws) instead of a completion handler",
+          "passed": true,
+          "evidence": "func load(_ url: URL) async throws"
+        },
+        {
+          "text": "cache state is protected by an actor or Mutex (actor keyword or Mutex< present)",
+          "passed": true,
+          "evidence": "actor ImageLoader"
+        },
+        {
+          "text": "migrated.swift typechecks under swiftc -typecheck -swift-version 6",
+          "passed": true,
+          "evidence": "clean"
+        },
+        {
+          "text": "MIGRATION.md explains the isolation choice (mentions actor/MainActor/Sendable)",
+          "passed": true,
+          "evidence": "actor"
+        },
+        {
+          "text": "duplicate in-flight requests are coalesced in code or explicitly discussed in MIGRATION.md",
+          "passed": true,
+          "evidence": "duplicat"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 157.3,
+        "tokens": 49126,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "swift build exits 0 in the delivered package",
+          "passed": true,
+          "evidence": "[0/1] Planning build\nBuilding for debugging...\n[0/1] Write swift-version--58304C5D6DBC2206.txt\n[2/3] Compiling RateKit TokenBucketRateLimiter.swift\n[3/3] Emitting module RateKit\nBuild complete! (1.55s"
+        },
+        {
+          "text": "swift test exits 0 in the delivered package",
+          "passed": true,
+          "evidence": "\u2714 Test \"Concurrent load cannot acquire faster than the refill rate allows\" passed after 0.251 seconds.\n\u2714 Suite \"TokenBucketRateLimiter\" passed after 0.251 seconds.\n\u2714 Test run with 11 tests in 1 suite "
+        },
+        {
+          "text": "the rate limiter is an actor",
+          "passed": true,
+          "evidence": "Sources/RateKit/TokenBucketRateLimiter.swift:public actor TokenBucketRateLimiter {\nSources/RateKit/TokenBucketRateLimiter.swift:            // hop ont"
+        },
+        {
+          "text": "acquire() honors task cancellation (checkCancellation / withTaskCancellationHandler / CancellationError)",
+          "passed": true,
+          "evidence": "Sources/RateKit/TokenBucketRateLimiter.swift:/// `CancellationError` without consuming a token.\nSources/RateKit/TokenBucketRateLimiter.swift:    /// `"
+        },
+        {
+          "text": "tests use Swift Testing (@Test and #expect), not XCTest",
+          "passed": true,
+          "evidence": "Tests/RateKitTests/TokenBucketRateLimiterTests.swift:    @Test(\"Burst  | Tests/RateKitTests/TokenBucketRateLimiterTests.swift:        #expect(e"
+        },
+        {
+          "text": "no Thread.sleep, DispatchQueue, or semaphores in Sources/",
+          "passed": true,
+          "evidence": "none found"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6666666666666666,
+        "passed": 4,
+        "failed": 2,
+        "total": 6,
+        "time_seconds": 71.9,
+        "tokens": 40747,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "fixed.swift contains no try!, as!, or force-unwrap operators",
+          "passed": true,
+          "evidence": "no force ops"
+        },
+        {
+          "text": "fixed.swift typechecks under swiftc -typecheck -swift-version 6",
+          "passed": true,
+          "evidence": "clean"
+        },
+        {
+          "text": "fixed.swift uses Codable instead of JSONSerialization",
+          "passed": true,
+          "evidence": "Codable in code, JSONSerialization only in comments/absent"
+        },
+        {
+          "text": "the -1 sentinel is replaced by an Optional or throwing API",
+          "passed": true,
+          "evidence": "-> Int?"
+        },
+        {
+          "text": "REVIEW.md identifies stringly-typed keys AND the try? error-swallowing pattern",
+          "passed": false,
+          "evidence": "keys:Stringly / swallow:no match"
+        },
+        {
+          "text": "REVIEW.md addresses concurrency safety of the class (Sendable/MainActor/actor mentioned)",
+          "passed": false,
+          "evidence": "no match"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 201.2,
+        "stddev": 151.7482,
+        "min": 111.1,
+        "max": 376.4
+      },
+      "tokens": {
+        "mean": 65091.6667,
+        "stddev": 17542.639,
+        "min": 51899,
+        "max": 85000
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.8889,
+        "stddev": 0.1925,
+        "min": 0.6667,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 103.6,
+        "stddev": 46.7578,
+        "min": 71.9,
+        "max": 157.3
+      },
+      "tokens": {
+        "mean": 43580.6667,
+        "stddev": 4802.7869,
+        "min": 40747,
+        "max": 49126
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.11",
+      "time_seconds": "+97.6",
+      "tokens": "+21511"
+    }
+  },
+  "notes": [],
+  "analyst_observations": [
+    "The pass-rate delta comes entirely from eval-2 (code review): baseline missed try?-swallowing and concurrency-safety, the two 'review depth' assertions. Evals 0-1 pass for both configs \u2014 the model is already strong on mechanical migration and greenfield actors, so those assertions don't discriminate; consider tightening them in iteration 2.",
+    "Qualitative gaps the assertions under-count: with-skill implemented in-flight request deduplication (baseline only discussed it in prose); with-skill injected a test Clock giving 10/10 deterministic tests with zero real sleeps, while baseline tests sleep on a real ContinuousClock (flake risk); with-skill review found 15 issues vs ~7 baseline.",
+    "Cost of the skill: roughly +97s and +21.5k tokens per task (reference reading + more compile verification). Reasonable for correctness-critical work; heavy for trivial snippets \u2014 SKILL.md's 'when NOT to over-apply' section is doing necessary work.",
+    "High time stddev in with-skill config is driven by the RateKit package eval (376s) which built and ran tests repeatedly."
+  ]
+}

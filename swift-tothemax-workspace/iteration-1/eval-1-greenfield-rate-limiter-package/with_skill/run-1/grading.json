@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "swift build exits 0 in the delivered package",
+      "passed": true,
+      "evidence": "[0/1] Planning build\nBuilding for debugging...\n[0/1] Write swift-version--58304C5D6DBC2206.txt\n[2/3] Emitting module RateKit\n[3/3] Compiling RateKit TokenBucket.swift\nBuild complete! (0.34s)\n"
+    },
+    {
+      "text": "swift test exits 0 in the delivered package",
+      "passed": true,
+      "evidence": "\u2714 Test cancelledWaiterReturnsItsReservation() passed after 0.001 seconds.\n\u2714 Suite \"TokenBucket\" passed after 0.001 seconds.\n\u2714 Test run with 10 tests in 1 suite passed after 0.001 seconds.\n"
+    },
+    {
+      "text": "the rate limiter is an actor",
+      "passed": true,
+      "evidence": "Sources/RateKit/TokenBucket.swift:public actor TokenBucket<ClockType: Clock<Duration>> {"
+    },
+    {
+      "text": "acquire() honors task cancellation (checkCancellation / withTaskCancellationHandler / CancellationError)",
+      "passed": true,
+      "evidence": "Sources/RateKit/TokenBucket.swift:    /// `CancellationError` is thrown.\nSources/RateKit/TokenBucket.swift:        try Task.checkCancellation()"
+    },
+    {
+      "text": "tests use Swift Testing (@Test and #expect), not XCTest",
+      "passed": true,
+      "evidence": "Tests/RateKitTests/TokenBucketTests.swift:    @Test func acquiresImmed | Tests/RateKitTests/TokenBucketTests.swift:        #expect(await bucket"
+    },
+    {
+      "text": "no Thread.sleep, DispatchQueue, or semaphores in Sources/",
+      "passed": true,
+      "evidence": "none found"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

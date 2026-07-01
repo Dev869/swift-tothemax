@@ -1,0 +1,19 @@
+# build products
+.build/
+DerivedData/
+*.xcresult/
+xcuserdata/
+
+# generated (xcodegen regenerates from project.yml)
+*.xcodeproj/
+
+# crawl artifacts: large logs + screenshots may contain personal data from system UI
+swift-tothemax-workspace/demo/crawl-artifacts*/
+
+# third-party repo clones used only as study material
+swift-tothemax-workspace/research/ecosystem-refs/
+
+# crash reports (may contain device/user identifiers)
+*.ips
+
+.claude/

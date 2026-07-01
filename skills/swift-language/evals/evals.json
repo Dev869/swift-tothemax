@@ -1,0 +1,50 @@
+{
+  "skill_name": "swift-language",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "legacy-concurrency-migration",
+      "prompt": "Here's a Swift class from our app. Migrate it to modern Swift concurrency so it compiles cleanly in Swift 6 language mode, keeping the same behavior:\n\n```swift\nfinal class ImageLoader {\n    static let shared = ImageLoader()\n    private var cache: [URL: Data] = [:]\n    private let queue = DispatchQueue(label: \"imageloader\", attributes: .concurrent)\n\n    func load(_ url: URL, completion: @escaping (Result<Data, Error>) -> Void) {\n        queue.async(flags: .barrier) {\n            if let cached = self.cache[url] {\n                DispatchQueue.main.async { completion(.success(cached)) }\n                return\n            }\n            URLSession.shared.dataTask(with: url) { data, _, error in\n                if let error = error {\n                    DispatchQueue.main.async { completion(.failure(error)) }\n                    return\n                }\n                let data = data!\n                self.queue.async(flags: .barrier) {\n                    self.cache[url] = data\n                }\n                DispatchQueue.main.async { completion(.success(data)) }\n            }.resume()\n        }\n    }\n}\n```\n\nWrite the migrated code to migrated.swift and a short MIGRATION.md explaining each change.",
+      "expected_output": "An actor (or @MainActor/Mutex-based) implementation with async throws API, no DispatchQueue, no data races, handles duplicate in-flight requests or at least discusses it; MIGRATION.md explains isolation choices; code typechecks in Swift 6 mode.",
+      "files": [],
+      "assertions": [
+        "migrated.swift contains no DispatchQueue usage",
+        "load API is async (async throws) instead of a completion handler",
+        "cache state is protected by an actor or Mutex (actor keyword or Mutex< present)",
+        "migrated.swift typechecks under swiftc -typecheck -swift-version 6",
+        "MIGRATION.md explains the isolation choice (mentions actor/MainActor/Sendable)",
+        "duplicate in-flight requests are coalesced in code or explicitly discussed in MIGRATION.md"
+      ]
+    },
+    {
+      "id": 1,
+      "eval_name": "greenfield-rate-limiter-package",
+      "prompt": "Create a Swift package called RateKit containing a token-bucket rate limiter that can be safely used from many concurrent tasks. It should expose `func acquire() async throws` that waits until a token is available and respects task cancellation. Include tests. Target the current stable Swift toolchain and make sure `swift build` and `swift test` pass.",
+      "expected_output": "A compiling SwiftPM package: actor-based limiter using ContinuousClock, cooperative cancellation handled (withTaskCancellationHandler or checkCancellation), Swift Testing tests (@Test/#expect) that inject a clock or otherwise avoid flakiness, sensible Package.swift with Swift 6 language mode.",
+      "files": [],
+      "assertions": [
+        "swift build exits 0 in the delivered package",
+        "swift test exits 0 in the delivered package",
+        "the rate limiter is an actor",
+        "acquire() honors task cancellation (checkCancellation / withTaskCancellationHandler / CancellationError)",
+        "tests use Swift Testing (@Test and #expect), not XCTest",
+        "no Thread.sleep, DispatchQueue, or semaphores in Sources/"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "code-review-idioms",
+      "prompt": "Review this Swift file and fix what's wrong with it. Write the corrected version to fixed.swift and list the issues you found in REVIEW.md:\n\n```swift\nimport Foundation\n\nprotocol Storage {\n    func save(_ data: Data, key: String)\n    func load(key: String) -> Data?\n}\n\nclass SettingsManager {\n    var storage: any Storage\n    var onChange: (() -> Void)?\n\n    init(storage: any Storage) { self.storage = storage }\n\n    func update(name: String?, age: Int?) {\n        let n = name!\n        let a = age!\n        let dict = [\"name\": n, \"age\": String(a)]\n        let data = try! JSONSerialization.data(withJSONObject: dict)\n        storage.save(data, key: \"settings\")\n        DispatchQueue.main.async { [weak self] in\n            guard let self = self else { return }\n            self.onChange?()\n        }\n    }\n\n    func getAge() -> Int {\n        if let data = storage.load(key: \"settings\") {\n            let dict = try? JSONSerialization.jsonObject(with: data) as? [String: String]\n            return Int((dict!)![\"age\"]!)!\n        }\n        return -1\n    }\n}\n```",
+      "expected_output": "Identifies: force unwraps of optional parameters, try!, stringly-typed keys, JSONSerialization instead of Codable, -1 sentinel instead of Optional/throws, unneeded existential mutability, concurrency-unsafe mutable class (suggests @MainActor/actor/Sendable story), silent try? swallowing. Fixed version uses Codable struct, typed errors or optionals, and is Swift-6-mode safe.",
+      "files": [],
+      "assertions": [
+        "fixed.swift contains no try!, as!, or force-unwrap operators",
+        "fixed.swift typechecks under swiftc -typecheck -swift-version 6",
+        "fixed.swift uses Codable instead of JSONSerialization",
+        "the -1 sentinel is replaced by an Optional or throwing API",
+        "REVIEW.md identifies stringly-typed keys AND the try? error-swallowing pattern",
+        "REVIEW.md addresses concurrency safety of the class (Sendable/MainActor/actor mentioned)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+name: TestScreen
+options:
+  bundleIdPrefix: dev.devinwilson
+targets:
+  TestScreen:
+    type: application
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources: [Sources]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      PRODUCT_BUNDLE_IDENTIFIER: dev.devinwilson.TestScreen
+      SWIFT_VERSION: "6.0"
+  TestScreenUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources: [UITests]
+    dependencies:
+      - target: TestScreen
+    settings:
+      TEST_TARGET_NAME: TestScreen
+      SWIFT_VERSION: "6.0"
+      GENERATE_INFOPLIST_FILE: YES
+schemes:
+  TestScreen:
+    build:
+      targets: { TestScreen: all, TestScreenUITests: [test] }
+    test:
+      targets: [TestScreenUITests]

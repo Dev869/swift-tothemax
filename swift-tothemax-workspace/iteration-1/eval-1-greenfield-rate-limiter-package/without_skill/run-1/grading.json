@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "swift build exits 0 in the delivered package",
+      "passed": true,
+      "evidence": "[0/1] Planning build\nBuilding for debugging...\n[0/1] Write swift-version--58304C5D6DBC2206.txt\n[2/3] Compiling RateKit TokenBucketRateLimiter.swift\n[3/3] Emitting module RateKit\nBuild complete! (1.55s"
+    },
+    {
+      "text": "swift test exits 0 in the delivered package",
+      "passed": true,
+      "evidence": "\u2714 Test \"Concurrent load cannot acquire faster than the refill rate allows\" passed after 0.251 seconds.\n\u2714 Suite \"TokenBucketRateLimiter\" passed after 0.251 seconds.\n\u2714 Test run with 11 tests in 1 suite "
+    },
+    {
+      "text": "the rate limiter is an actor",
+      "passed": true,
+      "evidence": "Sources/RateKit/TokenBucketRateLimiter.swift:public actor TokenBucketRateLimiter {\nSources/RateKit/TokenBucketRateLimiter.swift:            // hop ont"
+    },
+    {
+      "text": "acquire() honors task cancellation (checkCancellation / withTaskCancellationHandler / CancellationError)",
+      "passed": true,
+      "evidence": "Sources/RateKit/TokenBucketRateLimiter.swift:/// `CancellationError` without consuming a token.\nSources/RateKit/TokenBucketRateLimiter.swift:    /// `"
+    },
+    {
+      "text": "tests use Swift Testing (@Test and #expect), not XCTest",
+      "passed": true,
+      "evidence": "Tests/RateKitTests/TokenBucketRateLimiterTests.swift:    @Test(\"Burst  | Tests/RateKitTests/TokenBucketRateLimiterTests.swift:        #expect(e"
+    },
+    {
+      "text": "no Thread.sleep, DispatchQueue, or semaphores in Sources/",
+      "passed": true,
+      "evidence": "none found"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

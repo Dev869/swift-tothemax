@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "migrated.swift contains no DispatchQueue usage",
+      "passed": true,
+      "evidence": "only in comments/none"
+    },
+    {
+      "text": "load API is async (async throws) instead of a completion handler",
+      "passed": true,
+      "evidence": "func load(_ url: URL) async throws"
+    },
+    {
+      "text": "cache state is protected by an actor or Mutex (actor keyword or Mutex< present)",
+      "passed": true,
+      "evidence": "actor serializes"
+    },
+    {
+      "text": "migrated.swift typechecks under swiftc -typecheck -swift-version 6",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "MIGRATION.md explains the isolation choice (mentions actor/MainActor/Sendable)",
+      "passed": true,
+      "evidence": "actor"
+    },
+    {
+      "text": "duplicate in-flight requests are coalesced in code or explicitly discussed in MIGRATION.md",
+      "passed": true,
+      "evidence": "inFlight"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

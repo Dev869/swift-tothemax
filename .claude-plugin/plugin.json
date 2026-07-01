@@ -1,0 +1,9 @@
+{
+  "name": "swift-tothemax",
+  "description": "Swift and Apple development to the max — skills covering the Swift language (6.x), SwiftUI, UX/HIG, App Store review, Apple legal/privacy compliance, and release operations.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Devin Wilson",
+    "email": "devin27wilson@gmail.com"
+  }
+}

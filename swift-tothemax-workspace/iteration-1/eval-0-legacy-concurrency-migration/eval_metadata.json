@@ -1,0 +1,13 @@
+{
+  "eval_id": 0,
+  "eval_name": "legacy-concurrency-migration",
+  "prompt": "Here's a Swift class from our app. Migrate it to modern Swift concurrency so it compiles cleanly in Swift 6 language mode, keeping the same behavior:\n\n```swift\nfinal class ImageLoader {\n    static let shared = ImageLoader()\n    private var cache: [URL: Data] = [:]\n    private let queue = DispatchQueue(label: \"imageloader\", attributes: .concurrent)\n\n    func load(_ url: URL, completion: @escaping (Result<Data, Error>) -> Void) {\n        queue.async(flags: .barrier) {\n            if let cached = self.cache[url] {\n                DispatchQueue.main.async { completion(.success(cached)) }\n                return\n            }\n            URLSession.shared.dataTask(with: url) { data, _, error in\n                if let error = error {\n                    DispatchQueue.main.async { completion(.failure(error)) }\n                    return\n                }\n                let data = data!\n                self.queue.async(flags: .barrier) {\n                    self.cache[url] = data\n                }\n                DispatchQueue.main.async { completion(.success(data)) }\n            }.resume()\n        }\n    }\n}\n```\n\nWrite the migrated code to migrated.swift and a short MIGRATION.md explaining each change.",
+  "assertions": [
+    "migrated.swift contains no DispatchQueue usage",
+    "load API is async (async throws) instead of a completion handler",
+    "cache state is protected by an actor or Mutex (actor keyword or Mutex< present)",
+    "migrated.swift typechecks under swiftc -typecheck -swift-version 6",
+    "MIGRATION.md explains the isolation choice (mentions actor/MainActor/Sendable)",
+    "duplicate in-flight requests are coalesced in code or explicitly discussed in MIGRATION.md"
+  ]
+}

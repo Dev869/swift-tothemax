@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "fixed.swift contains no try!, as!, or force-unwrap operators",
+      "passed": true,
+      "evidence": "no force ops"
+    },
+    {
+      "text": "fixed.swift typechecks under swiftc -typecheck -swift-version 6",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "fixed.swift uses Codable instead of JSONSerialization",
+      "passed": true,
+      "evidence": "Codable present, JSONSerialization absent"
+    },
+    {
+      "text": "the -1 sentinel is replaced by an Optional or throwing API",
+      "passed": true,
+      "evidence": "throws"
+    },
+    {
+      "text": "REVIEW.md identifies stringly-typed keys AND the try? error-swallowing pattern",
+      "passed": true,
+      "evidence": "keys:Stringly / swallow:try?` swallowing the decode error** \u2014 the original discard"
+    },
+    {
+      "text": "REVIEW.md addresses concurrency safety of the class (Sendable/MainActor/actor mentioned)",
+      "passed": true,
+      "evidence": "Concurren"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

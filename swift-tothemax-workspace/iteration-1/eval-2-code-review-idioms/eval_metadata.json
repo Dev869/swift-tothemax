@@ -1,0 +1,13 @@
+{
+  "eval_id": 2,
+  "eval_name": "code-review-idioms",
+  "prompt": "Review this Swift file and fix what's wrong with it. Write the corrected version to fixed.swift and list the issues you found in REVIEW.md:\n\n```swift\nimport Foundation\n\nprotocol Storage {\n    func save(_ data: Data, key: String)\n    func load(key: String) -> Data?\n}\n\nclass SettingsManager {\n    var storage: any Storage\n    var onChange: (() -> Void)?\n\n    init(storage: any Storage) { self.storage = storage }\n\n    func update(name: String?, age: Int?) {\n        let n = name!\n        let a = age!\n        let dict = [\"name\": n, \"age\": String(a)]\n        let data = try! JSONSerialization.data(withJSONObject: dict)\n        storage.save(data, key: \"settings\")\n        DispatchQueue.main.async { [weak self] in\n            guard let self = self else { return }\n            self.onChange?()\n        }\n    }\n\n    func getAge() -> Int {\n        if let data = storage.load(key: \"settings\") {\n            let dict = try? JSONSerialization.jsonObject(with: data) as? [String: String]\n            return Int((dict!)![\"age\"]!)!\n        }\n        return -1\n    }\n}\n```",
+  "assertions": [
+    "fixed.swift contains no try!, as!, or force-unwrap operators",
+    "fixed.swift typechecks under swiftc -typecheck -swift-version 6",
+    "fixed.swift uses Codable instead of JSONSerialization",
+    "the -1 sentinel is replaced by an Optional or throwing API",
+    "REVIEW.md identifies stringly-typed keys AND the try? error-swallowing pattern",
+    "REVIEW.md addresses concurrency safety of the class (Sendable/MainActor/actor mentioned)"
+  ]
+}
