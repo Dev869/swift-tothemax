@@ -1,0 +1,13 @@
+{
+  "name": "swift-tothemax",
+  "owner": {
+    "name": "Devin Wilson"
+  },
+  "plugins": [
+    {
+      "name": "swift-tothemax",
+      "source": ".",
+      "description": "Swift and Apple development to the max — 8 skills covering the Swift 6.x language, SwiftUI (components, libraries, design systems, visual iteration), UX/HIG, App Store review, Apple legal/privacy compliance, release operations, and an autonomous UI crawler with crash capture."
+    }
+  ]
+}
