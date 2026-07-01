@@ -2,6 +2,17 @@
 
 A Claude Code plugin covering every facet of Swift and Apple-platform development, current to mid-2026 (Swift 6.3 stable / 6.4 beta, Xcode 26.6, iOS 27 beta). All version-sensitive claims research-verified against swift.org, Swift Evolution, and developer.apple.com.
 
+## Installation
+
+In Claude Code:
+
+```
+/plugin marketplace add Dev869/swift-tothemax
+/plugin install swift-tothemax@swift-tothemax
+```
+
+All 8 skills load automatically; start any Apple-platform task (or invoke `apple-dev-conductor` directly) and the right skills trigger.
+
 ## Skills
 
 | Skill | Facet |
